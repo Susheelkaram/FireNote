@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "356841081079",
+    "firebase_url": "https://fire-note-b877a.firebaseio.com",
+    "project_id": "fire-note-b877a",
+    "storage_bucket": "fire-note-b877a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:356841081079:android:be99d1ef26ae49d7",
+        "android_client_info": {
+          "package_name": "com.susheelkaram.firenote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "356841081079-0lpmqlrqmr0t9cbj2na85tgca3rqa47u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCa1J6FW30FwblxQpRnslJsKtHH2A6LPpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "356841081079-0lpmqlrqmr0t9cbj2na85tgca3rqa47u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
