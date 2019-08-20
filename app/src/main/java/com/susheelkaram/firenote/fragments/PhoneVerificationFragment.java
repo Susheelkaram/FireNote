@@ -1,4 +1,4 @@
-package com.susheelkaram.firenote;
+package com.susheelkaram.firenote.fragments;
 
 
 import android.content.Context;
@@ -29,6 +29,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.susheelkaram.firenote.utils.Constants;
+import com.susheelkaram.firenote.HomeActivity;
+import com.susheelkaram.firenote.R;
 
 import java.util.concurrent.TimeUnit;
 

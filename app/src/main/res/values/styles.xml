@@ -13,4 +13,15 @@
         <item name="android:padding">10dp</item>
     </style>
 
+    <style name="myButton" parent="Widget.MaterialComponents.Button">
+
+    </style>
+
+    <style name="myOutlineButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+
+    </style>
+    <style name="myTextButton" parent="Widget.MaterialComponents.Button.TextButton">
+
+    </style>
+
 </resources>
