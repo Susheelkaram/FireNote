@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskExecutors;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -29,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.susheelkaram.firenote.utils.Constants;
 import com.susheelkaram.firenote.HomeActivity;
 import com.susheelkaram.firenote.R;
@@ -41,14 +43,16 @@ import java.util.concurrent.TimeUnit;
  */
 public class PhoneVerificationFragment extends Fragment {
 
-    EditText inputPhone;
-    EditText inputOtp;
-    EditText inputPassword;
-    Button buttonSendOtp;
-    Button buttonSignUp;
-    TextView textMobileVerifiedMessage;
+    private EditText inputPhone;
+    private EditText inputOtp;
+    private EditText inputPassword;
+    private EditText inputName;
+    private Button buttonSignUp;
+    private Button buttonVerifyOtp;
+    private TextInputLayout inputOtpContainer;
+    private TextView textMobileVerifiedMessage;
 
-    Context mContext;
+    private Context mContext;
 
     private boolean isOtpVerified = false;
 
@@ -78,26 +82,21 @@ public class PhoneVerificationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         textMobileVerifiedMessage = (TextView) view.findViewById(R.id.text_MobileVerifiedMessage);
         inputPhone = (EditText) view.findViewById(R.id.input_PhoneNo);
+        inputName = (EditText) view.findViewById(R.id.input_Name);
         inputOtp = (EditText) view.findViewById(R.id.input_Otp);
+        inputOtpContainer = (TextInputLayout) view.findViewById(R.id.layout_InputOtpContainer);
         inputPassword = (EditText) view.findViewById(R.id.input_Password);
         buttonSignUp = (Button) view.findViewById(R.id.button_SignUp);
-        buttonSendOtp = (Button) view.findViewById(R.id.button_SendOtp);
+        buttonVerifyOtp = (Button) view.findViewById(R.id.button_VerifyOtp);
 
-
-        buttonSendOtp.setOnClickListener(new View.OnClickListener() {
+        buttonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String phoneNo = inputPhone.getText().toString().trim();
-                if (phoneNo != null && phoneNo.length() == 10) {
-                    sendVerificationCode(phoneNo);
-                } else {
-                    inputPhone.setError("Invalid Phone number");
-                    inputPhone.requestFocus();
-                }
+                signUp();
             }
         });
 
-        buttonSignUp.setOnClickListener(new View.OnClickListener() {
+        buttonVerifyOtp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signUp();
@@ -107,12 +106,27 @@ public class PhoneVerificationFragment extends Fragment {
 
     // Final Sign up Method
     private void signUp() {
-        String userInputCode = inputOtp.getText().toString().trim();
+        String phone = inputPhone.getText().toString();
 
+        if (isValidData()) {
+            sendVerificationCode(phone);
+
+            inputPhone.setEnabled(false);
+            inputName.setEnabled(false);
+            inputPassword.setEnabled(false);
+        }
+    }
+
+    private void verifyOtp() {
+        // If OTP is automatically verfied by Instant Verification
         if (isOtpVerified && mAuth.getCurrentUser() != null) {
             linkCredentials();
             return;
         }
+
+        String userInputCode = inputOtp.getText().toString();
+
+        // Manually verifying code
         if (!userInputCode.isEmpty()) {
             verifyCode(userInputCode);
         } else {
@@ -120,14 +134,11 @@ public class PhoneVerificationFragment extends Fragment {
         }
     }
 
+    // Links Phone with Email/Password
     private void linkCredentials() {
         String phone = mAuth.getCurrentUser().getPhoneNumber();
-        String password = inputPassword.getText().toString();
-
-        if (!isValidPassword(password)) {
-            inputPassword.setError("Password should be atleast 8 Characters");
-            return;
-        }
+        String password = inputPassword.getText().toString().trim();
+        String name = inputName.getText().toString();
 
         AuthCredential emailCredential = getEmailCredential(phone, password);
         FirebaseUser user = mAuth.getCurrentUser();
@@ -139,13 +150,25 @@ public class PhoneVerificationFragment extends Fragment {
                     if (task.isSuccessful()) {
                         Log.d("SIGN_UP", "Credential linking SUCCESSFUL");
 
-                        String phone = mAuth.getCurrentUser().getPhoneNumber();
-                        String email = mAuth.getCurrentUser().getEmail();
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        String name = inputName.getText().toString().trim();
+
+                        // Setting Display Name
+                        UserProfileChangeRequest nameChangeRequest = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(name)
+                                .build();
+                        user.updateProfile(nameChangeRequest);
 
                         Intent intent = new Intent(getActivity(), HomeActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
-                    } else {
+                    }
+                    else {
+                        if(mAuth.getCurrentUser() != null){
+                            Intent intent = new Intent(getActivity(), HomeActivity.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
                         Toast.makeText(mContext, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         Log.d("SIGN_UP", "Credential linking FAILED");
                     }
@@ -180,10 +203,8 @@ public class PhoneVerificationFragment extends Fragment {
                         if (task.isSuccessful()) {
                             String phone = mAuth.getCurrentUser().getPhoneNumber();
                             String password = inputPassword.getText().toString();
-                            if (isValidPassword(password)) {
-                                AuthCredential emailCredential = getEmailCredential(phone, password);
-                                linkCredentials();
-                            }
+                            AuthCredential emailCredential = getEmailCredential(phone, password);
+                            linkCredentials();
                         } else {
                             Toast.makeText(mContext, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -204,8 +225,7 @@ public class PhoneVerificationFragment extends Fragment {
                 public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                     inputOtp.setText(phoneAuthCredential.getSmsCode());
 
-                    buttonSendOtp.setVisibility(View.GONE);
-                    inputOtp.setVisibility(View.GONE);
+                    inputOtpContainer.setVisibility(View.GONE);
                     inputPhone.setEnabled(false);
 
                     textMobileVerifiedMessage.setVisibility(View.VISIBLE);
@@ -227,13 +247,25 @@ public class PhoneVerificationFragment extends Fragment {
         return EmailAuthProvider.getCredential(fullEmail, password);
     }
 
-    // Checks if Password meets guidelines
-    private boolean isValidPassword(String password) {
-        if (password.isEmpty() || password.length() < 8) {
+    // Checks if user entered Valid Phone, Name & Password
+    private boolean isValidData() {
+        String phone = inputPhone.getText().toString().trim();
+        String name = inputName.getText().toString().trim();
+        String password = inputPassword.getText().toString().trim();
+
+        if (phone.isEmpty() || name.isEmpty() || password.isEmpty()) {
+            Toast.makeText(mContext, "Enter valid Phone, Name & Password", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (phone.length() != 10) {
+            inputPhone.setError("Phone no. should be 10 digit number.");
+            return false;
+        }
+        if (password.length() < 8) {
+            inputPassword.setError("Password should be atleast 8 Characters long");
             return false;
         }
         return true;
     }
-
-
 }

@@ -38,6 +38,7 @@ import java.util.ArrayList;
 public class HomeActivity extends AppCompatActivity {
     private String phone;
     private String email;
+    private String name;
     private String uid;
     private String notesPath;
 
@@ -73,11 +74,12 @@ public class HomeActivity extends AppCompatActivity {
 
         // Getting User Details
         uid = mUser.getUid();
+        name = mUser.getDisplayName();
         phone = mUser.getPhoneNumber();
         email = mAuth.getCurrentUser().getEmail();
 
         // Setting welcome Note
-        textWelcomeNote.setText("Hi! " + phone);
+        textWelcomeNote.setText("Hi! " + name + " (" + phone + ")");
 
         // Setting up RecyclerView
         recyclerNoteList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));

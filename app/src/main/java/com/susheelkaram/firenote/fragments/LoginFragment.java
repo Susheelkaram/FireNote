@@ -92,8 +92,8 @@ public class LoginFragment extends Fragment {
     }
 
     private boolean areValidCredentials(){
-        String phone = inputLoginPhone.getText().toString();
-        String password = inputLoginPassword.getText().toString();
+        String phone = inputLoginPhone.getText().toString().trim();
+        String password = inputLoginPassword.getText().toString().trim();
 
         if(phone.isEmpty() || phone.length() != 10){
             inputLoginPhone.setError("Enter a valid Mobile No.");

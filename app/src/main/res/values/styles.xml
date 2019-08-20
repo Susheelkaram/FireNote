@@ -9,7 +9,8 @@
     </style>
 
     <style name="Heading">
-        <item name="android:textSize">40sp</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textStyle">bold</item>
         <item name="android:padding">10dp</item>
     </style>
 
