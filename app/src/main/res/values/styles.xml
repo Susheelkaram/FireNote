@@ -6,7 +6,9 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorBlack</item>
     </style>
+
 
     <style name="Heading">
         <item name="android:textSize">25sp</item>
@@ -15,13 +17,16 @@
     </style>
 
     <style name="myButton" parent="Widget.MaterialComponents.Button">
-
+        <item name="cornerRadius">20dp</item>
     </style>
 
     <style name="myOutlineButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="cornerRadius">20dp</item>
 
     </style>
+
     <style name="myTextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="cornerRadius">20dp</item>
 
     </style>
 

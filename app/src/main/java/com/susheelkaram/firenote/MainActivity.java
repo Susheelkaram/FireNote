@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
             String id = currentUser.getPhoneNumber();
 
             Intent i = new Intent(this, HomeActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(i);
         }
     }

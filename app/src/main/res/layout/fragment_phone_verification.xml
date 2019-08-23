@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:text="Sign up"
             android:textAlignment="center" />
 
@@ -98,6 +98,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_SignUp"
+                style="@style/myButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Sign Up" />
@@ -130,6 +131,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/button_VerifyOtp"
+                style="@style/myButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Verify" />

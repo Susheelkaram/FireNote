@@ -4,17 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeActivity">
+    tools:context=".HomeActivity"
+    android:background="@color/colorWhite"
+    android:paddingStart="5dp"
+    android:paddingEnd="5dp">
     <TextView
         android:id="@+id/text_WelcomeMessage"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hi"
         android:textColor="@android:color/black"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textAlignment="center"
-        android:layout_marginBottom="5dp"
-        android:layout_alignParentTop="true"/>
+        android:layout_marginBottom="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_NoteList"
         android:layout_width="match_parent"
@@ -29,22 +34,11 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="You are Signed in!"
             android:textAlignment="center" />
-
-        <!--<com.google.android.material.button.MaterialButton-->
-        <!--android:id="@+id/button_AddNewNote"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--style="@style/Widget.MaterialComponents.Button.OutlinedButton"-->
-        <!--android:text="Add Note"-->
-        <!--app:icon="@drawable/ic_add_black_24dp"/>-->
-
 
     </LinearLayout>
 <LinearLayout
